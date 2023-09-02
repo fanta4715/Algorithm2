@@ -48,7 +48,7 @@ public class Main {
             // 바로 처리하자
             int person = Integer.parseInt(br.readLine());
             int indexRank = findRank(person); //person에 해당하는 rank의 인덱스
-            sb.append(rank[indexRank]+"\n");
+            sb.append(rank[indexRank]).append("\n");
         }
         //문제의 요점은, 해당 값의 칭호를 log시간안에 찾으라는 것.
         System.out.println(sb);
