@@ -3,9 +3,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 
 
 public class Main {
@@ -20,9 +18,11 @@ public class Main {
         //for : keywordCnt keyword받고, boolean hashmap 넣기
         //false -> 사용된 적 없음
         //true -> 사용됨
-        HashMap<String,Boolean> map = new HashMap<>();
+
+        //set을 쓰는게 오히려 더 나을지도?
+        Set<String> set = new HashSet<>();
         for (int i=0;i<keywordCnt;i++){
-            map.put(br.readLine(),false);
+            set.add(br.readLine());
         }
         StringBuilder sb = new StringBuilder();
         int cnt = keywordCnt;
@@ -33,21 +33,15 @@ public class Main {
                 //key를 받음
                 String key = st.nextToken();
 
-                if (!map.containsKey(key)) continue;
-                if (map.get(key)==false){
-                    map.put(key,true);
-                    cnt--;
-                }
-                //key를 통해 HashMap값 변경
-
-
+                //set에서 key지움
+                set.remove(key);
             }
+            sb.append(set.size()).append("\n");
 
+        // 꼭 마지막에는 엔터를 안 붙여야 하는가?
 
-            if (i!=articleCnt-1)
-                sb.append(cnt).append("\n");
-            else
-                sb.append(cnt);
+            
+
         }
         System.out.println(sb);
 
