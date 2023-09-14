@@ -31,6 +31,10 @@ public class Main {
             int mid = (left+right)/2;
 
             //공유기를 조금밖에 설치 못한다면, 왼쪽 범위를 살펴야함
+            //distance가 1~house[i]-house[0]까지 있다고 하자.
+            //공유기 설치 개수는 distance가 커질 수록 줄어든다
+            // 5 5 3 3 3 1 1 이라고 하자
+            //
             if (howManyWifiCnt(mid,house)<wifiCnt){
                 right=mid;
             }
