@@ -1,5 +1,4 @@
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -49,7 +48,7 @@ public class Main {
 
         }
 
-        stack.clear();
+        stack=new Stack<>();
         for (int i=N;i>0;i--){
             //i번째 건물보다 높이가 낮은 것들 stack에서 전부 뺴냄
             while(!stack.isEmpty() && stack.peek().height<=buildings[i].height){
