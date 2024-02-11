@@ -2,6 +2,7 @@ import java.util.*;
 
 class Solution {
     List<int[]> keys = new ArrayList<>();
+    
     public int solution(String[][] relation) {
         int colNum = relation[0].length;
         for (int i=1; i<=colNum; i++) {
@@ -13,32 +14,18 @@ class Solution {
     public void dfs(String[][] relation, boolean[] use, int nowIdx, int goal) {
         if (nowIdx == relation[0].length) {
             int useNum = findUseNum(use);
-            if (useNum == goal) {
-                //해당 경우의 키 값이 전부 다른지 확인 + 
-                Set<String> set = new HashSet<>();
-                for (int i = 0; i < relation.length; i++) {
-                    StringBuilder sb = new StringBuilder();
-                    for (int j = 0; j < relation[0].length; j++) {
-                        if (use[j]) sb.append(relation[i][j]).append(":");
-                    }
-                    set.add(sb.toString());
-                }
-                if (set.size() != relation.length) return; 
-                
-                if (isMinimum(use)) {
-                    int[] key = new int[goal];
-                    int idx = 0;
-                    for (int i=0; i<relation[0].length; i++) {
-                        if (use[i]) key[idx++] = i;
-                    }
-                    keys.add(key);
-                }
-                
-                
+            if (useNum != goal) return;
+            if (!isUnique(relation, use)) return;
+            if (!isMinimum(use)) return;
+            
+            int[] key = new int[goal];
+            int idx = 0;
+            for (int i=0; i<relation[0].length; i++) {
+                if (use[i]) key[idx++] = i;
             }
+            keys.add(key);
             return;
         }
-        
         dfs(relation, use, nowIdx+1, goal);
         use[nowIdx] = true;
         dfs(relation, use, nowIdx+1, goal);
@@ -73,6 +60,20 @@ class Solution {
             if (allSame) return false;
         }
         
+        return true;
+    }
+    
+    public boolean isUnique(String[][] relation, boolean[] use) {
+        Set<String> set = new HashSet<>();
+            for (int i = 0; i < relation.length; i++) {
+                StringBuilder sb = new StringBuilder();
+                for (int j = 0; j < relation[0].length; j++) {
+                    if (use[j]) sb.append(relation[i][j]).append(":");
+                }
+                set.add(sb.toString());
+            }
+        
+        if (set.size() != relation.length) return false;
         return true;
     }
 }
