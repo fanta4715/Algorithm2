@@ -1,16 +1,13 @@
 import java.util.*;
 
 class Solution {
-    //해당 후보키가 똑같을 때, 식별하는 값이 똑같으면 unique를 성립함. 하지만 여기에서는 모든 튜플은 유일하게 식별가능하므로
-    //후보키의 set이 unique하게 존재하는 경우만 살피면 됨.
-    static int answer = 0;
-    static List<int[]> keys = new ArrayList<>();
+    List<int[]> keys = new ArrayList<>();
     public int solution(String[][] relation) {
         int colNum = relation[0].length;
         for (int i=1; i<=colNum; i++) {
             dfs(relation, new boolean[colNum], 0, i);
         }
-        return answer;
+        return keys.size();
     }
     
     public void dfs(String[][] relation, boolean[] use, int nowIdx, int goal) {
@@ -35,7 +32,6 @@ class Solution {
                         if (use[i]) key[idx++] = i;
                     }
                     keys.add(key);
-                    answer++;
                 }
                 
                 
