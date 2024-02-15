@@ -1,56 +1,42 @@
-import java.util.*;
-
 class Solution {
-    public long solution(int cap, int houseNum, int[] deliveries, int[] pickups) {
-        Stack<Integer> deliveryStack = new Stack<>();
-        Stack<Integer> pickupStack = new Stack<>();
-        
-        setStack(deliveryStack, deliveries);
-        setStack(pickupStack, pickups);
-        
-        return getDistance(deliveryStack, pickupStack, cap);
-    }
-    private void setStack(Stack<Integer> stack, int[] array) {
-        for (int i = 0; i < array.length; i++) {
-            for (int j=0; j< array[i]; j++) {
-                stack.add(i+1);
-            }
-        }
-    }
-    
-    private long getDistance(Stack<Integer> deliveryStack, Stack<Integer> pickupStack, int cap) {
-        long answer = 0L;
-        while (!deliveryStack.isEmpty() || !pickupStack.isEmpty()) {
-            int destNum = 0;
-            if (deliveryStack.isEmpty()) destNum = pickupStack.peek();
-            else if (pickupStack.isEmpty()) destNum = deliveryStack.peek();
-            else destNum = (pickupStack.peek() >  deliveryStack.peek()) ?
-                pickupStack.peek() : deliveryStack.peek();
+    public long solution(int cap, int n, int[] deliveries, int[] pickups) {
+        long answer = 0;
 
-            answer += destNum*2;
-            if (deliveryStack.size() >= cap) {
-                for (int i = 0 ; i < cap; i++) {
-                    deliveryStack.pop();
-                }
-            } else {
-                int repeatNum = deliveryStack.size();
-                for (int i = 0; i < repeatNum; i++) {
-                    deliveryStack.pop();
-                }
+        int dPointer = n-1;
+        int pPointer = n-1;
+
+
+
+        while(dPointer >= 0 || pPointer >= 0) {
+
+            while(dPointer>=0 && deliveries[dPointer] == 0) dPointer--;
+            while(pPointer>=0 && pickups[pPointer] == 0) pPointer--;
+
+            int sum = 0;
+
+            answer += (Math.max(dPointer,pPointer)+1)*2;
+
+            // dPointer 조정
+            while(dPointer >= 0 && sum < cap) {
+                sum += deliveries[dPointer];
+                deliveries[dPointer--] = 0;
             }
-            
-            if (pickupStack.size() >= cap) {
-                for (int i = 0 ; i < cap; i++) {
-                    pickupStack.pop();
-                }
-            } else {
-                int repeatNum = pickupStack.size();
-                for (int i = 0 ; i < repeatNum; i++) {
-                    pickupStack.pop();
-                }
-                
+            if(sum > cap) {
+                deliveries[++dPointer] = sum-cap;
+            }
+
+            sum = 0;
+            // pPointer 조정
+            while(pPointer >= 0 && sum < cap) {
+                sum += pickups[pPointer];
+                pickups[pPointer--] = 0;
+            }
+            if(sum > cap) {
+                pickups[++pPointer] = sum-cap;
             }
         }
+
+
         return answer;
     }
 }
