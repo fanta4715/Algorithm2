@@ -48,34 +48,30 @@ class Solution {
     }
     
     private void rotateMap(int[][] map, int x1, int y1, int x2, int y2) {
-        int pre = map[x1][y1];
-        int tmp = 0;
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(map[x1][y1]);
         //x1 y1 -> x1 y2
         for (int i=1; y1 + i <= y2; i++) {
-            tmp = map[x1][y1 + i];
-            map[x1][y1 + i] = pre;
-            pre = tmp;
+            queue.add(map[x1][y1 + i]);
+            map[x1][y1 + i] = queue.remove();
         }
         
         //x1 y2 -> x2 y2
         for (int i=1; x1 + i <= x2; i++) {
-            tmp = map[x1+i][y2];
-            map[x1+i][y2] = pre;
-            pre = tmp;
+            queue.add(map[x1+i][y2]);
+            map[x1+i][y2] = queue.remove();
         }
         
         //x2 y2 -> x2 y1
         for (int i=1; y2 - i >= y1; i++) {
-            tmp = map[x2][y2-i];
-            map[x2][y2-i] = pre;
-            pre = tmp;
+            queue.add(map[x2][y2-i]);
+            map[x2][y2-i] = queue.remove();
         }
         
         //x2 y1 -> x1 y1
         for (int i=1; x2 - i >= x1; i++) {
-            tmp = map[x2-i][y1];
-            map[x2-i][y1] = pre;
-            pre = tmp;
+            queue.add(map[x2-i][y1]);
+            map[x2-i][y1] = queue.remove();
         }
     }
 }
