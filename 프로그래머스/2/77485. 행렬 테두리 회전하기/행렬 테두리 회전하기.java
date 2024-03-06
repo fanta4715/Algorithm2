@@ -2,6 +2,8 @@ import java.lang.*;
 import java.util.*;
 
 class Solution {
+    int[] dx = {0, 1, 0, -1};
+    int[] dy = {1, 0, -1, 0};
     public int[] solution(int rows, int columns, int[][] queries) {
         int[][] map = new int[rows+1][columns+1];
         for (int i=1; i<=rows; i++) {
@@ -16,62 +18,31 @@ class Solution {
             int y1 = queries[i][1];
             int y2 = queries[i][3];
             
-            int min = findMin(map, x1,y1, x2,y2);
-            answer[i] = min;
-            rotateMap(map, x1,y1, x2,y2);
+            answer[i] = rotateMapAndFindMin(map, x1,y1, x2,y2);
         }
         return answer;
     }
     
-    private int findMin(int[][] map, int x1, int y1, int x2, int y2) {
+    private int rotateMapAndFindMin(int[][] map, int x1, int y1, int x2, int y2) {
+        Queue<Integer> queue = new LinkedList<>();
         PriorityQueue<Integer> pq = new PriorityQueue<>();
-        for (int i=1; y1 + i <= y2; i++) {
-            pq.add(map[x1][y1 + i]);
-        }
+        int dir = 0, x = x1, y = y1;
+        queue.add(map[x1][y1]);
+        pq.add(map[x1][y1]);
         
-        //x1 y2 -> x2 y2
-        for (int i=1; x1 + i <= x2; i++) {
-            pq.add(map[x1+i][y2]);
-        }
-        
-        //x2 y2 -> x2 y1
-        for (int i=1; y2 - i >= y1; i++) {
-            pq.add(map[x2][y2-i]);
-        }
-        
-        //x2 y1 -> x1 y1
-        for (int i=1; x2 - i >= x1; i++) {
-            pq.add(map[x2-i][y1]);
+        while (true) {
+            if (x == x1 && y == y2) dir = 1;
+            if (x == x2 && y == y2) dir = 2;
+            if (x == x2 && y == y1) dir = 3;
+            
+            x += dx[dir];
+            y += dy[dir];
+            queue.add(map[x][y]);
+            pq.add(map[x][y]);
+            map[x][y] = queue.remove();
+            if (x == x1 && y == y1) break;
         }
         
         return pq.poll();
-    }
-    
-    private void rotateMap(int[][] map, int x1, int y1, int x2, int y2) {
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(map[x1][y1]);
-        //x1 y1 -> x1 y2
-        for (int i=1; y1 + i <= y2; i++) {
-            queue.add(map[x1][y1 + i]);
-            map[x1][y1 + i] = queue.remove();
-        }
-        
-        //x1 y2 -> x2 y2
-        for (int i=1; x1 + i <= x2; i++) {
-            queue.add(map[x1+i][y2]);
-            map[x1+i][y2] = queue.remove();
-        }
-        
-        //x2 y2 -> x2 y1
-        for (int i=1; y2 - i >= y1; i++) {
-            queue.add(map[x2][y2-i]);
-            map[x2][y2-i] = queue.remove();
-        }
-        
-        //x2 y1 -> x1 y1
-        for (int i=1; x2 - i >= x1; i++) {
-            queue.add(map[x2-i][y1]);
-            map[x2-i][y1] = queue.remove();
-        }
     }
 }
